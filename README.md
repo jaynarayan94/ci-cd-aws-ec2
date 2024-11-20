@@ -29,3 +29,12 @@ sudo systemctl status docker
 # create ECR with name: my-flask-app
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 866824485776.dkr.ecr.us-east-1.amazonaws.com
 ```
+```
+aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+aws-region: ${{ secrets.AWS_REGION }}
+${{ secrets.AWS_ACCOUNT_ID}} # AWS_ACCOUNT_ID : Aws login Account id
+${{ secrets.EC2_HOST }}  # Public IPv4 DNS
+${{ secrets.EC2_USERNAME }}  # ec2-user or ubuntu
+${{ secrets.EC2_SSH_KEY }}   #.pem file content/create key_pair for the ec2
+```
