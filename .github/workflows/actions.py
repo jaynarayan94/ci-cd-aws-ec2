@@ -36,8 +36,8 @@ jobs:
       - name: Push Docker Image to ECR
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-          docker tag my-flask-app:latest:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest:latest    
+          docker tag my-flask-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest    
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }} 
           key: ${{ secrets.EC2_SSH_KEY }}  
           script: |
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest:latest
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest
             docker stop my-flask-app:latest || true # In case the container doesn't exist yet
             docker rm my-flask-app:latest || true
-            docker run -d -p 80:8005 --name my-flask-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest:latest 
+            docker run -d -p 80:8005 --name my-flask-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest 
