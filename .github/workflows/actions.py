@@ -40,14 +40,14 @@ jobs:
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
           docker tag my-flask-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest    
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest     # AWS_ACCOUNT_ID : Aws login Account id
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }} 
-          username: ${{ secrets.EC2_USERNAME }} 
-          key: ${{ secrets.EC2_SSH_KEY }}  
+          host: ${{ secrets.EC2_HOST }}  # Public IPv4 DNS
+          username: ${{ secrets.EC2_USERNAME }}  # ec2-user or ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}   #.pem file content/create key_pair for the ec2
           script: |
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-flask-app:latest
             docker stop my-flask-app || true # In case the container doesn't exist yet
