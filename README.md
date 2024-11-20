@@ -1,7 +1,7 @@
 # ci-cd-python - Commands to install Docker on EC2 
 - Ensure port 80 is available
 ```
-[Linux Machine]
+[Amazon Linux Machine]
 sudo yum update -y
 sudo amazon-linux-extras install docker
 sudo service docker start
